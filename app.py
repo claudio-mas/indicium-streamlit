@@ -4,6 +4,45 @@ import streamlit as st
 import snowflake.connector
 import pandas as pd
 
+# Função para listar os databases disponíveis no Snowflake
+def listar_databases(usuario, senha, conta, warehouse):
+    conn = snowflake.connector.connect(
+        user=usuario,
+        password=senha,
+        account=conta,
+        warehouse=warehouse
+    )
+
+    cursor = conn.cursor()
+    query = "SHOW DATABASES"
+    cursor.execute(query)
+
+    # Obter os databases e fechar a conexão
+    databases = [row[1] for row in cursor]
+    conn.close()
+
+    return databases
+
+# Função para listar os schemas disponíveis no Snowflake
+def listar_schemas(usuario, senha, conta, warehouse, database):
+    conn = snowflake.connector.connect(
+        user=usuario,
+        password=senha,
+        account=conta,
+        warehouse=warehouse,
+        database=database
+    )
+
+    cursor = conn.cursor()
+    query = "SHOW SCHEMAS"
+    cursor.execute(query)
+
+    # Obter os schemas e fechar a conexão
+    schemas = [row[1] for row in cursor]
+    conn.close()
+
+    return schemas
+
 # Função para listar as tabelas disponíveis no Snowflake em um schema específico
 def listar_tabelas(usuario, senha, conta, warehouse, database, schema):
     conn = snowflake.connector.connect(
