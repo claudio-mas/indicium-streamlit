@@ -234,7 +234,7 @@ st.title("App Streamlit com Snowflake")
 
 # Adiciona a imagem centralizada na parte superior da tela
 image_url = "https://github.com/claudio-mas/indicium-streamlit/blob/main/images/indicium.png"
-st.image(image_url, width=327, height=154, use_container_width=True)
+st.image(image_url)     #, width=327, height=154, use_container_width=True)
 
 # Organiza as caixas de texto e combobox em duas colunas
 col1, col2 = st.columns(2)
