@@ -143,6 +143,8 @@
 import streamlit as st
 import snowflake.connector
 import pandas as pd
+import mitosheet
+from PIL import Image
 
 # Função para listar os databases disponíveis no Snowflake
 def listar_databases(usuario, senha, conta, warehouse):
@@ -229,32 +231,31 @@ def obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, ta
 
     return df
 
-# Título do aplicativo
-st.title("App Streamlit com Snowflake")
-
 # Adiciona a imagem centralizada na parte superior da tela
-image_url = "https://github.com/claudio-mas/indicium-streamlit/blob/main/images/indicium.png"
-st.image(image_url)     #, width=327, height=154, use_container_width=True)
+# image_url = "https://github.com/claudio-mas/indicium-streamlit/blob/main/images/indicium.png"
+# st.image(image_url, width=327) #, height=154, use_container_width=True)
 
-# Organiza as caixas de texto e combobox em duas colunas
-col1, col2 = st.columns(2)
+# image = Image.open('./images/indicium.png')
+# st.image(image, width=327)
 
-# Coluna 1
-with col1:
-    usuario = st.text_input("Usuário do Snowflake:")
-    senha = st.text_input("Senha do Snowflake:", type="password")
-    conta = st.text_input("Snowflake account:")
-    warehouse = st.text_input("Nome do warehouse do Snowflake:")
+# Título do aplicativo
+st.title("Central de Dados - DSaaS")
+    
+# Caixas de texto e comboboxes na barra lateral
+with st.sidebar:
+    st.header("Configurações do Snowflake")
+    usuario = st.text_input("Usuário:")
+    senha = st.text_input("Senha:", type="password")
+    conta = st.text_input("Conta:")
+    warehouse = st.text_input("Warehouse:")
 
-# Coluna 2
-with col2:
     # Lista de databases disponíveis
     databases_disponiveis = []
     if usuario and senha and conta and warehouse:
         databases_disponiveis = listar_databases(usuario, senha, conta, warehouse)
 
     # Combobox para selecionar o database
-    database = st.selectbox("Database do Snowflake:", databases_disponiveis)
+    database = st.selectbox("Database:", databases_disponiveis)
 
     # Lista de schemas disponíveis
     schemas_disponiveis = []
@@ -262,7 +263,7 @@ with col2:
         schemas_disponiveis = listar_schemas(usuario, senha, conta, warehouse, database)
 
     # Combobox para selecionar o schema
-    schema = st.selectbox("Schema do Snowflake:", schemas_disponiveis)
+    schema = st.selectbox("Schema:", schemas_disponiveis)
 
     # Lista de tabelas disponíveis
     tabelas_disponiveis = []
@@ -270,7 +271,7 @@ with col2:
         tabelas_disponiveis = listar_tabelas(usuario, senha, conta, warehouse, database, schema)
 
     # Combobox para selecionar a tabela
-    tabela = st.selectbox("Tabela do Snowflake:", tabelas_disponiveis)
+    tabela = st.selectbox("Tabela:", tabelas_disponiveis)
 
 # Verificar se todas as informações foram fornecidas
 if st.button("Obter Dados"):
@@ -278,8 +279,8 @@ if st.button("Obter Dados"):
         # Obter dados do Snowflake
         df = obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, tabela)
 
-        # Exibir DataFrame
-        st.write("Dados da Tabela:")
-        st.write(df)
+        # Exibir DataFrame no centro da tela
+        # st.write("### Dados da Tabela:")
+        st.dataframe(df)
     else:
         st.warning("Por favor, forneça todas as informações necessárias.")
