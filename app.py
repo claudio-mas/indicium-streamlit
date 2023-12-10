@@ -241,6 +241,8 @@ def obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, ta
 
 # Título do aplicativo
 st.set_page_config(layout="wide")
+# Oculta o botão 'manage app'
+st.set_page_config(hide_streamlit_logo=True)
 st.title("Central de Dados - DSaaS")
     
 # Caixas de texto e comboboxes na barra lateral
@@ -282,7 +284,7 @@ if st.button("Obter Dados"):
         df = obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, tabela)
         # Cria uma mitosheet
         # sheet = mitosheet.Sheet(df)
-        new_dfs, code = spreadsheet(df)
+        new_dfs = spreadsheet(df)
         # Apresenta a mitosheet
         st.write(new_dfs)
         # st.code(code)
