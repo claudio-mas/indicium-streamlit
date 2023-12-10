@@ -141,6 +141,7 @@
 # app.py
 
 import streamlit as st
+from mitosheet.streamlit.v1 import spreadsheet
 import snowflake.connector
 import pandas as pd
 import mitosheet
@@ -239,6 +240,7 @@ def obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, ta
 # st.image(image, width=327)
 
 # Título do aplicativo
+st.set_page_config(layout="wide")
 st.title("Central de Dados - DSaaS")
     
 # Caixas de texto e comboboxes na barra lateral
@@ -278,9 +280,15 @@ if st.button("Obter Dados"):
     if usuario and senha and conta and warehouse and database and schema and tabela:
         # Obter dados do Snowflake
         df = obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, tabela)
-
+        # Cria uma mitosheet
+        # sheet = mitosheet.Sheet(df)
+        new_dfs, code = spreadsheet(df)
+        # Apresenta a mitosheet
+        st.write(new_dfs)
+        # st.code(code)
+        
         # Exibir DataFrame no centro da tela
         # st.write("### Dados da Tabela:")
-        st.dataframe(df)
+        # st.dataframe(df)
     else:
         st.warning("Por favor, forneça todas as informações necessárias.")
