@@ -241,8 +241,6 @@ def obter_dados_snowflake(usuario, senha, conta, warehouse, database, schema, ta
 
 # Título do aplicativo
 st.set_page_config(layout="wide")
-# Oculta o botão 'manage app'
-st.set_page_config(hide_streamlit_logo=True)
 st.title("Central de Dados - DSaaS")
     
 # Caixas de texto e comboboxes na barra lateral
